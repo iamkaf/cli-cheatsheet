@@ -1,0 +1,249 @@
+---
+import '../styles/global.css';
+
+const tools = [
+  {
+    name: 'zoxide',
+    tagline: 'smarter cd powered by frecency',
+    docs: 'https://github.com/ajeetdsouza/zoxide',
+    sections: [
+      {
+        title: 'What it does',
+        items: [
+          'Tracks directories you visit and jumps to them by ranked match.',
+          'Replaces repetitive cd paths with short fuzzy queries.'
+        ]
+      },
+      {
+        title: 'Common commands',
+        code: [
+          'z foo                # jump to the best match for foo',
+          'zi foo               # interactive selection with fzf if available',
+          'z foo bar            # match multiple path fragments',
+          'z -                  # jump back',
+          'zoxide query foo     # print the matched directory',
+          'zoxide add ~/code    # add a directory manually',
+          'zoxide remove ~/tmp  # remove a directory from the database'
+        ]
+      },
+      {
+        title: 'Useful shell patterns',
+        code: [
+          'cd "$(zoxide query projects)"',
+          'alias j="z"',
+          'zoxide query -i      # interactive picker over ranked matches'
+        ]
+      }
+    ]
+  },
+  {
+    name: 'fd',
+    tagline: 'sane, fast find',
+    docs: 'https://github.com/sharkdp/fd',
+    sections: [
+      {
+        title: 'What it does',
+        items: [
+          'Finds files and directories with sensible defaults.',
+          'Ignores .gitignore patterns and hidden files unless you ask otherwise.'
+        ]
+      },
+      {
+        title: 'Common commands',
+        code: [
+          'fd config            # find files or dirs matching config',
+          'fd -t f package      # files only',
+          'fd -t d src          # directories only',
+          'fd -e ts             # files with extension ts',
+          'fd -H env            # include hidden files',
+          'fd -I node_modules   # do not respect ignore files',
+          'fd . ~/code/sites    # list everything under a path'
+        ]
+      },
+      {
+        title: 'Act on results',
+        code: [
+          'fd -e log -X rm      # pass all matches to one command',
+          'fd -e jpg -x convert {} {.}.png',
+          'fd -e md -X wc -l',
+          'fd -e rs -x bat {}'
+        ]
+      }
+    ]
+  },
+  {
+    name: 'fzf',
+    tagline: 'fuzzy finder for everything',
+    docs: 'https://github.com/junegunn/fzf',
+    sections: [
+      {
+        title: 'What it does',
+        items: [
+          'Lets you interactively narrow a list using fuzzy matching.',
+          'Works best when piped from other commands.'
+        ]
+      },
+      {
+        title: 'Common commands',
+        code: [
+          'fd | fzf                        # pick a file from fd output',
+          'history | fzf                  # search shell history',
+          'git branch --all | fzf         # select a branch',
+          'ps -ef | fzf                   # find a process',
+          'fzf --preview "bat --color=always {}"',
+          'fzf --multi                    # select multiple items',
+          'fzf --exact                    # disable fuzzy matching'
+        ]
+      },
+      {
+        title: 'Useful patterns',
+        code: [
+          'export FZF_DEFAULT_COMMAND="fd --type f"',
+          'vim "$(fd -t f | fzf)"',
+          'cd "$(fd -t d | fzf)"',
+          'git checkout "$(git branch --format="%(refname:short)" | fzf)"'
+        ]
+      }
+    ]
+  },
+  {
+    name: 'rg',
+    tagline: 'ripgrep for fast text search',
+    docs: 'https://github.com/BurntSushi/ripgrep',
+    sections: [
+      {
+        title: 'What it does',
+        items: [
+          'Searches file contents recursively with excellent defaults.',
+          'Respects .gitignore and skips binary files by default.'
+        ]
+      },
+      {
+        title: 'Common commands',
+        code: [
+          'rg TODO                      # search recursively for TODO',
+          'rg -n "function main"       # include line numbers',
+          'rg -t ts "useEffect"        # limit to TypeScript files',
+          'rg -g "*.astro" title       # glob filter',
+          'rg -i kaf                    # case-insensitive',
+          'rg -C 2 error                # include context lines',
+          'rg --files                   # list searchable files only'
+        ]
+      },
+      {
+        title: 'Useful patterns',
+        code: [
+          'rg --files | fzf             # pick a project file',
+          'rg -l "TODO"                # print matching filenames only',
+          'rg "pattern" ~/code/sites',
+          'rg -g "!dist" -g "!node_modules" foo'
+        ]
+      }
+    ]
+  },
+  {
+    name: 'jq',
+    tagline: 'JSON parser, formatter, and transformer',
+    docs: 'https://jqlang.org',
+    sections: [
+      {
+        title: 'What it does',
+        items: [
+          'Slices, transforms, and pretty-prints JSON.',
+          'Essential for APIs, CLI output, and structured logs.'
+        ]
+      },
+      {
+        title: 'Common commands',
+        code: [
+          'jq . data.json                         # pretty-print JSON',
+          'jq -r .name package.json               # raw string output',
+          'jq .items[].id response.json           # iterate array field',
+          'jq ".users[] | {id, email}" users.json',
+          'curl ... | jq .                        # format API output',
+          'jq "keys" file.json                   # list top-level keys',
+          'jq "map(select(.active))" data.json   # filter arrays'
+        ]
+      },
+      {
+        title: 'Useful patterns',
+        code: [
+          'jq -r ".items[] | [.id, .name] | @tsv" data.json',
+          'jq ".count += 1" state.json',
+          'jq -s "." part1.json part2.json',
+          'gh api user | jq {login, name, public_repos}'
+        ]
+      }
+    ]
+  }
+];
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="description" content="A raw HTML cheatsheet for zoxide, fd, fzf, rg, and jq." />
+    <meta name="generator" content={Astro.generator} />
+    <title>CLI Cheatsheet</title>
+  </head>
+  <body>
+    <header>
+      <h1>CLI Cheatsheet</h1>
+      <p>A plain reference for zoxide, fd, fzf, rg, and jq.</p>
+      <p>Raw HTML only. Tailwind is installed and available. I restrained myself heroically.</p>
+      <nav>
+        <ul>
+          {tools.map((tool) => (
+            <li><a href={`#${tool.name}`}>{tool.name}</a></li>
+          ))}
+        </ul>
+      </nav>
+    </header>
+
+    <main>
+      <section>
+        <h2>Quick combos</h2>
+        <ul>
+          <li><code>fd -t f | fzf</code> — pick a file</li>
+          <li><code>rg --files | fzf</code> — fuzzy-open tracked files</li>
+          <li><code>rg pattern | fzf</code> — search then narrow</li>
+          <li><code>gh api user | jq .</code> — inspect JSON cleanly</li>
+          <li><code>zoxide query -i</code> — interactively jump to a directory</li>
+        </ul>
+      </section>
+
+      {tools.map((tool) => (
+        <section id={tool.name}>
+          <hr />
+          <header>
+            <h2>{tool.name}</h2>
+            <p>{tool.tagline}</p>
+            <p><a href={tool.docs}>Documentation</a></p>
+          </header>
+
+          {tool.sections.map((section) => (
+            <section>
+              <h3>{section.title}</h3>
+              {section.items && (
+                <ul>
+                  {section.items.map((item) => <li>{item}</li>)}
+                </ul>
+              )}
+              {section.code && (
+                <pre><code>{section.code.join('\n')}</code></pre>
+              )}
+            </section>
+          ))}
+        </section>
+      ))}
+    </main>
+
+    <footer>
+      <hr />
+      <p>Domain: <a href="https://cli.kaf.sh">cli.kaf.sh</a></p>
+      <p>Stack: Astro, Tailwind, raw HTML.</p>
+    </footer>
+  </body>
+</html>
